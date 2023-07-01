@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/uikit@3.16.17/dist/css/uikit.min.css"
+    />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <title>Stoic Quote Beta</title>
+
+    <!-- HTML Meta Tags -->
+    <title>Stoic Quote Beta</title>
+    <meta
+      name="description"
+      content="
+Stoic Quote Beta: Daily wisdom from Stoic philosophers. Refresh for inspiration."
+    />
+
+    <!-- Facebook Meta Tags -->
+    <meta property="og:url" content="https://stoicquote.netlify.app/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Stoic Quote Beta" />
+    <meta
+      property="og:description"
+      content="
+Stoic Quote Beta: Daily wisdom from Stoic philosophers. Refresh for inspiration."
+    />
+    <meta property="og:image" content="https://picsum.photos/720.jpg" />
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:domain" content="stoicquote.netlify.app" />
+    <meta property="twitter:url" content="https://stoicquote.netlify.app/" />
+    <meta name="twitter:title" content="Stoic Quote Beta" />
+    <meta
+      name="twitter:description"
+      content="
+Stoic Quote Beta: Daily wisdom from Stoic philosophers. Refresh for inspiration."
+    />
+    <meta name="twitter:image" content="https://picsum.photos/720.jpg" />
+  </head>
+  <body>
+    <style>
+      .uk-border-rounded {
+        border-radius: 1rem;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      .wrapper {
+        padding: 1rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .wrapper img {
+        position: absolute;
+        object-fit: cover;
+        z-index: -999;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <section
+      class="wrapper uk-background-cover uk-panel uk-flex uk-flex-center uk-flex-middle uk-background-blend-darken uk-dark"
+      uk-height-viewport="offset-bottom: true"
+      uk-img
+    >
+      <img src="https://www.picsum.photos/1920/1080.jpg?blur" />
+
+      <div class="uk-container uk-container-large">
+        <div uk-grid>
+          <div class="uk-width-1-1">
+            <div
+              class="uk-card uk-card-default uk-card-large uk-card-body uk-card-hover uk-border-rounded"
+            >
+              <blockquote>
+                <p id="quotePlaceholder" class="uk-text-lead"></p>
+                <footer id="authorPlaceholder" class=""></footer>
+              </blockquote>
+            </div>
+          </div>
+          <p>
+            <a
+              class="uk-button uk-button-primary uk-border-rounded uk-margin-small-right"
+              href="#"
+              onclick="getQuote()"
+            >
+              <span
+                class="uk-text-middle"
+                uk-icon="icon: pull; ratio: .75"
+              ></span>
+              New Quote
+            </a>
+            <!-- <a
+              class="uk-button uk-button-primary uk-background-muted uk-text-secondary uk-border-rounded"
+              href="#"
+              onclick="translateQuote"
+            >
+              <span
+                class="uk-text-middle"
+                uk-icon="icon: commenting; ratio: .75"
+              ></span>
+              Translate
+            </a> -->
+          </p>
+        </div>
+      </div>
+    </section>
+    <section class="uk-section uk-section-muted uk-section-xsmall">
+      <div class="uk-container uk-container-large">
+        <div>
+          <p class="uk-margin-remove uk-text-meta">
+            Made by <a href="https://github.com/kuunnnte">kuunnnte</a> using
+            <a href="https://github.com/benhoneywill/stoic-quotes"
+              >stoic API.</a
+            >
+          </p>
+        </div>
+      </div>
+    </section>
+    <script>
+      const stoicMain = "https://stoic-quotes.com/api/quotes?num=1";
+      const stoicBackup = "https://api.themotivate365.com/stoic-quote";
+
+      let output;
+
+      const getQuote = () => {
+        fetch(stoicBackup, {
+          cache: "no-cache",
+        })
+          .then(
+            (response) => {
+              if (response.ok) {
+                return response.json();
+              }
+              throw new Error("Request failed!");
+            },
+            (networkError) => console.log(networkError.message)
+          )
+          .then((jsonResponse) => {
+            console.log(jsonResponse);
+
+            for (const key in jsonResponse) {
+              if (Object.hasOwnProperty.call(jsonResponse, key)) {
+                const response = jsonResponse[key];
+
+                // console.log(response, key);
+                // let quote = response["text"];
+                // let author = response["author"];
+
+                key === "author"
+                  ? (document.getElementById("authorPlaceholder").innerHTML =
+                      response)
+                  : (document.getElementById("quotePlaceholder").innerHTML =
+                      response);
+
+                // if (key === "author") {
+
+                // }
+
+                // if (key === "quote") {
+                //   document.getElementById("quotePlaceholder").innerHTML =
+                //     response;
+                // }
+              }
+            }
+          });
+      };
+
+      document.addEventListener("DOMContentLoaded", getQuote);
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.17/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.17/dist/js/uikit-icons.min.js"></script>
+  </body>
+</html>
